@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chord Randomizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #output {
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+        .count {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .notes {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chord Randomizer</h1>
+        <button onclick="generateRandomList()">Generate Random List</button>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function generateRandomList() {
+            const notes = ["A", "B", "C", "D", "E", "F", "G"];
+            const types = ["m"];
+            const allNotes = [];
+            
+            for (const note of notes) {
+                for (const variant of [note, note + "#", note + "b"]) {
+                    if (["Cb", "B#", "Fb", "E#"].includes(variant)) {
+                        continue;
+                    }
+                    allNotes.push(variant); // adding Major
+                    for (const type of types) { // adding all the other types
+                        allNotes.push(variant + type);
+                    }
+                }
+            }
+            
+            // Shuffle array using Fisher-Yates algorithm
+            for (let i = allNotes.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allNotes[i], allNotes[j]] = [allNotes[j], allNotes[i]];
+            }
+            
+            // Display results
+            const output = document.getElementById("output");
+            output.innerHTML = `
+                <div class="count">Total: ${allNotes.length} chords</div>
+                <div class="notes">${allNotes.join(", ")}</div>
+                
+            `;
+        }
+    </script>
+</body>
+</html>
